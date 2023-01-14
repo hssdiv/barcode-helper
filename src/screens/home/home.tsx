@@ -1,5 +1,5 @@
 import { ReactElement, useState } from 'react';
-import { Button, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Barcode from 'react-native-barcode-expo';
 import { useProducts } from '../../stores';
 
@@ -10,15 +10,15 @@ export const HomeScreen = (): ReactElement => {
   const { products, addProduct, removeProduct } = useProducts();
 
   return (
-    <View
-      style={{
+    <ScrollView
+      contentContainerStyle={{
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
       }}
     >
       {products.map(product => (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View key={product} style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
             onPress={() => setValue(product)}
             style={{
@@ -56,13 +56,14 @@ export const HomeScreen = (): ReactElement => {
             borderColor: 'lightgrey',
             width: '50%',
             paddingVertical: 5,
-            // marginBottom: 12,
           }}
         />
         <TouchableOpacity
           onPress={() => {
-            addProduct(value)
-            setValue('')
+            if (value) {
+              addProduct(value)
+              setValue('')
+            }
           }}
         >
           <Text
@@ -82,9 +83,9 @@ export const HomeScreen = (): ReactElement => {
           backgroundColor: 'white',
         }}
       >
-        {value &&
+        {value ?
           <Barcode
-            value={value}
+            value={'Hello World'}
             format='CODE128' // CODE39
             height={100}
             width={2}
@@ -92,8 +93,10 @@ export const HomeScreen = (): ReactElement => {
             lineColor='black'
             background='white'
           />
+          :
+          null
         }
       </View>
-    </View>
+    </ScrollView>
   );
 };
