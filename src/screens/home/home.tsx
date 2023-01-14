@@ -1,10 +1,13 @@
 import { ReactElement, useState } from 'react';
-import { Dimensions, Text, TextInput, View } from 'react-native';
+import { Button, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Barcode from 'react-native-barcode-expo';
+import { useProducts } from '../../stores';
 
 export const HomeScreen = (): ReactElement => {
 
   const [value, setValue] = useState('');
+
+  const { products, addProduct, removeProduct } = useProducts();
 
   return (
     <View
@@ -14,21 +17,64 @@ export const HomeScreen = (): ReactElement => {
         flex: 1,
       }}
     >
+      {products.map(product => (
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TouchableOpacity
+            onPress={() => setValue(product)}
+            style={{
+              paddingBottom: 12,
+            }}
+          >
+            <Text style={{ color: 'blue' }}>{product}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => removeProduct(product)}
+            style={{
+              paddingBottom: 12,
+              paddingHorizontal: 10,
+            }}
+          >
+            <Text style={{ color: 'red' }}>X</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
       <Text>Type value...</Text>
-      <TextInput
-        value={value}
-        onChangeText={setValue}
+      <View
         style={{
-          width: '50%',
-          backgroundColor: 'white',
-          paddingVertical: 5,
-          paddingHorizontal: 12,
-          borderWidth: 1,
-          borderColor: 'lightgrey',
-          marginBottom: 12,
-        }}
-      />
+          flexDirection: 'row',
+          alignItems: 'center'
 
+        }}
+      >
+        <TextInput
+          value={value}
+          onChangeText={setValue}
+          style={{
+            backgroundColor: 'white',
+            paddingHorizontal: 12,
+            borderWidth: 1,
+            borderColor: 'lightgrey',
+            width: '50%',
+            paddingVertical: 5,
+            // marginBottom: 12,
+          }}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            addProduct(value)
+            setValue('')
+          }}
+        >
+          <Text
+            style={{
+              color: 'blue',
+              paddingStart: 10,
+            }}
+          >
+            Save
+          </Text>
+        </TouchableOpacity>
+      </View>
       <View
         style={{
           width: '100%',
