@@ -49,7 +49,7 @@ export const HomeScreen = (): ReactElement => {
         <TextInput
           value={value}
           onChangeText={(text) => {
-            setValue(text.replace(/\D/g,''))
+            setValue(text.replace(/\D/g, ''))
           }}
           keyboardType='number-pad'
           style={{
