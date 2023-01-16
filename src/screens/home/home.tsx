@@ -89,7 +89,7 @@ export const HomeScreen = (): ReactElement => {
         {value ?
           <Barcode
             value={value}
-            format='CODE128' // CODE39
+            format='CODE128'
             height={100}
             width={2}
             textColor='black'
