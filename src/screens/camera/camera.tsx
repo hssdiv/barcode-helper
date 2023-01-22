@@ -4,6 +4,7 @@ import { runOnJS } from 'react-native-reanimated';
 import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
 import { OCRFrame, scanOCR } from "vision-camera-ocr";
 import * as Clipboard from 'expo-clipboard';
+import { useProducts } from '../../stores';
 
 export const CameraScreen = () => {
   const [hasPermission, setHasPermission] = React.useState(false);
@@ -11,6 +12,8 @@ export const CameraScreen = () => {
   const [pixelRatio, setPixelRatio] = React.useState<number>(1);
   const devices = useCameraDevices();
   const device = devices.back;
+
+  const { setCurrentProduct } =useProducts();
   
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet';
@@ -33,13 +36,14 @@ export const CameraScreen = () => {
             <TouchableOpacity
               onPress={async () => {
                 await Clipboard.setStringAsync(block.text);
+                setCurrentProduct(block.text);
                 Alert.alert(`"${block.text}" copied to the clipboard`);
               }}
               style={{
                 position: 'absolute',
                 left: block.frame.x * pixelRatio,
                 top: block.frame.y * pixelRatio,
-                backgroundColor: 'white',
+                backgroundColor: 'rgba(255,255,255,0.3)',
                 padding: 8,
                 borderRadius: 6,
               }}

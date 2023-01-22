@@ -1,13 +1,11 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Barcode from 'react-native-barcode-expo';
 import { useProducts } from '../../stores';
 
 export const HomeScreen = (): ReactElement => {
 
-  const [value, setValue] = useState('');
-
-  const { products, addProduct, removeProduct } = useProducts();
+  const { currentProduct, setCurrentProduct, products, addProduct, removeProduct } = useProducts();
 
   return (
     <ScrollView
@@ -20,7 +18,7 @@ export const HomeScreen = (): ReactElement => {
       {products.map(product => (
         <View key={product} style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
-            onPress={() => setValue(product)}
+            onPress={() => setCurrentProduct(product)}
             style={{
               paddingBottom: 12,
             }}
@@ -47,9 +45,9 @@ export const HomeScreen = (): ReactElement => {
         }}
       >
         <TextInput
-          value={value}
+          value={currentProduct}
           onChangeText={(text) => {
-            setValue(text.replace(/\D/g, ''))
+            setCurrentProduct(text.replace(/\D/g, ''))
           }}
           keyboardType='number-pad'
           style={{
@@ -63,9 +61,9 @@ export const HomeScreen = (): ReactElement => {
         />
         <TouchableOpacity
           onPress={() => {
-            if (value) {
-              addProduct(value)
-              setValue('')
+            if (currentProduct) {
+              addProduct(currentProduct)
+              setCurrentProduct('')
             }
           }}
         >
@@ -86,9 +84,9 @@ export const HomeScreen = (): ReactElement => {
           backgroundColor: 'white',
         }}
       >
-        {value ?
+        {currentProduct ?
           <Barcode
-            value={value}
+            value={currentProduct}
             format='CODE128'
             height={100}
             width={2}
